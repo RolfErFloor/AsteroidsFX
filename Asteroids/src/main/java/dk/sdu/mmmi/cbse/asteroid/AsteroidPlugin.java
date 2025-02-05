@@ -7,14 +7,28 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import java.util.Random;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 /**
  *
  * @author corfixen
  */
 public class AsteroidPlugin implements IGamePluginService {
 
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     @Override
     public void start(GameData gameData, World world) {
+
+        scheduler.scheduleAtFixedRate(() -> {
+            Entity asteroid = createAsteroid(gameData);
+            world.addEntity(asteroid);
+            System.out.println("Enemy created at: " + asteroid.getX() + ", " + asteroid.getY());
+        }, 0, 3, TimeUnit.SECONDS);
+
+
+
         Entity asteroid = createAsteroid(gameData);
         world.addEntity(asteroid);
     }
@@ -25,6 +39,7 @@ public class AsteroidPlugin implements IGamePluginService {
         for (Entity asteroid : world.getEntities(Asteroid.class)) {
             world.removeEntity(asteroid);
         }
+        scheduler.shutdownNow();
     }
 
     private Entity createAsteroid(GameData gameData) {
