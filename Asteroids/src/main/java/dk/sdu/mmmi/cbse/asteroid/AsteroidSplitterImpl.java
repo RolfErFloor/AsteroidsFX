@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class AsteroidSplitterImpl implements IAsteroidSplitter {
 
-    private static final int MIN_ASTEROID_SIZE = 8; // Minimum size before asteroids stop splitting
+    private static final int MIN_ASTEROID_SIZE = 5; // Minimum size before asteroids stop splitting
 
     @Override
     public void createSplitAsteroid(Entity asteroid, World world) {
@@ -23,9 +23,11 @@ public class AsteroidSplitterImpl implements IAsteroidSplitter {
         // Create two smaller asteroids
         for (int i = 0; i < 2; i++) {
             Entity smallerAsteroid = new Asteroid();
-            smallerAsteroid.setRadius(originalRadius / 2); // Reduce size
+            smallerAsteroid.setRadius(originalRadius / 2);// Reduce size
+            int size = (int) smallerAsteroid.getRadius();
             smallerAsteroid.setX(asteroid.getX() + (i == 0 ? -10 : 10)); // Offset new asteroids
             smallerAsteroid.setY(asteroid.getY() + (i == 0 ? -10 : 10));
+            smallerAsteroid.setPolygonCoordinates(size, -size, -size, -size, -size, size, size, size);
 
             // Apply a slight random rotation for variety
             Random rand = new Random();
