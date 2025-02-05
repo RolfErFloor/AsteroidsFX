@@ -1,4 +1,4 @@
-package dk.sdu.mmmi.cbse.playersystem;
+package dk.sdu.mmmi.cbse.enemysystem;
 
 import dk.sdu.mmmi.cbse.common.bullet.Bullet;
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
@@ -14,44 +14,44 @@ import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
 
-public class PlayerControlSystem implements IEntityProcessingService {
+public class EnemyMovementSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
             
-        for (Entity player : world.getEntities(Player.class)) {
+        for (Entity enemy : world.getEntities(Enemy.class)) {
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
-                player.setRotation(player.getRotation() - 5);                
+                enemy.setRotation(enemy.getRotation() - 5);
             }
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
-                player.setRotation(player.getRotation() + 5);                
+                enemy.setRotation(enemy.getRotation() + 5);
             }
             if (gameData.getKeys().isDown(GameKeys.UP)) {
-                double changeX = Math.cos(Math.toRadians(player.getRotation()));
-                double changeY = Math.sin(Math.toRadians(player.getRotation()));
-                player.setX(player.getX() + changeX);
-                player.setY(player.getY() + changeY);
+                double changeX = Math.cos(Math.toRadians(enemy.getRotation()));
+                double changeY = Math.sin(Math.toRadians(enemy.getRotation()));
+                enemy.setX(enemy.getX() + changeX);
+                enemy.setY(enemy.getY() + changeY);
             }
             if(gameData.getKeys().isDown(GameKeys.SPACE)) {                
                 getBulletSPIs().stream().findFirst().ifPresent(
-                        spi -> {world.addEntity(spi.createBullet(player, gameData));}
+                        spi -> {world.addEntity(spi.createBullet(enemy, gameData));}
                 );
             }
             
-        if (player.getX() < 0) {
-            player.setX(gameData.getDisplayWidth());
+        if (enemy.getX() < 0) {
+            enemy.setX(gameData.getDisplayWidth());
         }
 
-        if (player.getX() > gameData.getDisplayWidth()) {
-            player.setX(0);
+        if (enemy.getX() > gameData.getDisplayWidth()) {
+            enemy.setX(0);
         }
 
-        if (player.getY() < 0) {
-            player.setY(gameData.getDisplayHeight());
+        if (enemy.getY() < 0) {
+            enemy.setY(gameData.getDisplayHeight());
         }
 
-        if (player.getY() > gameData.getDisplayHeight()) {
-            player.setY(0);
+        if (enemy.getY() > gameData.getDisplayHeight()) {
+            enemy.setY(0);
         }
 
                                         
