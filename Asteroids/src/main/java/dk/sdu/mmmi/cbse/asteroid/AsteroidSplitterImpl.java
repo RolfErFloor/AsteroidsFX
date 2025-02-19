@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class AsteroidSplitterImpl implements IAsteroidSplitter {
 
-    private static final int MIN_ASTEROID_SIZE = 5; // Minimum size before asteroids stop splitting
+    private static final int MIN_ASTEROID_SIZE = 8; // Minimum size before asteroids stop splitting
 
     @Override
     public void createSplitAsteroid(Entity asteroid, World world) {

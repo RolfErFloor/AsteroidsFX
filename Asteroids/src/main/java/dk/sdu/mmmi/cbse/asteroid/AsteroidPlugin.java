@@ -17,14 +17,17 @@ import java.util.concurrent.TimeUnit;
  */
 public class AsteroidPlugin implements IGamePluginService {
 
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(r->{
+        Thread thread = new Thread(r);
+        thread.setDaemon(true);
+        return thread;
+    });
     @Override
     public void start(GameData gameData, World world) {
 
         scheduler.scheduleAtFixedRate(() -> {
             Entity asteroid = createAsteroid(gameData);
             world.addEntity(asteroid);
-            System.out.println("Enemy created at: " + asteroid.getX() + ", " + asteroid.getY());
         }, 0, 3, TimeUnit.SECONDS);
 
 

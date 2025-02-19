@@ -15,16 +15,19 @@ public class EnemyPlugin implements IGamePluginService {
 
     public EnemyPlugin() {
     }
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+        Thread thread = new Thread(r);
+        thread.setDaemon(true);
+        return thread;
+    });
 
     @Override
     public void start(GameData gameData, World world) {
 
-        // Schedule the enemy ship creation every 15 seconds
+
         scheduler.scheduleAtFixedRate(() -> {
             Entity enemy = createEnemyShip(gameData);
             world.addEntity(enemy);
-            System.out.println("Enemy created at: " + enemy.getX() + ", " + enemy.getY());
         }, 0, 15, TimeUnit.SECONDS);
     }
 
